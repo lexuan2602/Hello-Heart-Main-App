@@ -3,14 +3,18 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import YoutubePlayer from "react-native-youtube-iframe";
-export default function PlayVideo() {
+export default function RadioVideo() {
   const navigation = useNavigation();
-  const param = useRoute().params;
+  const video = useRoute().params.courseContent;
   const [videoChapter, setVideoChapter] = useState([]);
+  console.log("video");
+  console.log(video);
+
+  // console.log(param);
   const [playing, setPlaying] = useState(false);
-  useEffect(() => {
-    setVideoChapter(param.courseContent);
-  }, []);
+  // useEffect(() => {
+  //   setVideoChapter(param.courseContent);
+  // }, []);
 
   const onStateChange = useCallback((state) => {
     if (state === "ended") {
@@ -28,18 +32,18 @@ export default function PlayVideo() {
       {videoChapter ? (
         <View>
           <Text style={{ marginBottom: 10, fontSize: 20, fontWeight: "bold" }}>
-            {videoChapter.name}
+            {video.Description}
           </Text>
           <YoutubePlayer
             height={220}
             play={playing}
-            videoId={videoChapter.videoUrl}
+            videoId={"Sz_Ms84YzTU"}
             onChangeState={onStateChange}
           />
           <Text style={{ fontWeight: "bold", marginBottom: 10 }}>
             Description
           </Text>
-          <Text style={{ lineHeight: 20 }}>{videoChapter?.description}</Text>
+          <Text style={{ lineHeight: 20 }}>{video?.Description}</Text>
         </View>
       ) : null}
     </View>

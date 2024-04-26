@@ -21,7 +21,7 @@ export default function RadioContent({ Videos }) {
       <Text style={{ fontWeight: "bold", fontSize: 16 }}>Course Content</Text>
       <FlatList
         style={{ marginTop: 10 }}
-        data={course}
+        data={Videos}
         renderItem={({ item, index }) => (
           <TouchableOpacity
             onPress={() => onChapterPress(item)}
@@ -43,11 +43,11 @@ export default function RadioContent({ Videos }) {
                 marginRight: 20,
               }}
             >
-              {/* {index + 1} */}1
+              {index + 1}
             </Text>
 
             <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-              {/* {item.Topic ? item.Topic : item.name} */} aaaaa
+              {item.Description}
             </Text>
             <Ionicons
               name="play-circle"
