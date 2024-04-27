@@ -41,16 +41,18 @@
 //   );
 // }
 
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { useUser } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 export default function () {
   // const { isLoaded, isSignedIn, user } = useUser();
   // if (!isLoaded || !isSignedIn) {
   //   return null;
   // }
+  const navigation = useNavigation();
   return (
     <View
       style={{
