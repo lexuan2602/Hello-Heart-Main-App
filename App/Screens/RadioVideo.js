@@ -7,14 +7,8 @@ export default function RadioVideo() {
   const navigation = useNavigation();
   const video = useRoute().params.courseContent;
   const [videoChapter, setVideoChapter] = useState([]);
-  console.log("video");
-  console.log(video);
 
-  // console.log(param);
   const [playing, setPlaying] = useState(false);
-  // useEffect(() => {
-  //   setVideoChapter(param.courseContent);
-  // }, []);
 
   const onStateChange = useCallback((state) => {
     if (state === "ended") {
@@ -37,7 +31,7 @@ export default function RadioVideo() {
           <YoutubePlayer
             height={220}
             play={playing}
-            videoId={"Sz_Ms84YzTU"}
+            videoId={video?.Link}
             onChangeState={onStateChange}
           />
           <Text style={{ fontWeight: "bold", marginBottom: 10 }}>
