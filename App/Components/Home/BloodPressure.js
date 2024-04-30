@@ -110,9 +110,17 @@ export default function BloodPressure() {
               : "Enter your today Bp"}
           </Text>
         </Pressable>
-        <Text style={{ width: 180, opacity: 0.7, color: "white" }}>
-          See and discover what is your blood pressure meaning!
-        </Text>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("Tracker", {
+              screen: "Tracker",
+            });
+          }}
+        >
+          <Text style={{ width: 180, opacity: 0.7, color: "white" }}>
+            Seend discover what is your blood pressure meaning!
+          </Text>
+        </Pressable>
       </View>
     </View>
   );

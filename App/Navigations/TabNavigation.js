@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import HomeStackNavigation from "./HomeStackNavigation";
 import ProfileStackNavigation from "./ProfileStackNavigation";
+import TrackerNavigation from "./TrackerNavigation";
 const Tab = createBottomTabNavigator();
 export default function TabNavigation() {
   return (
@@ -24,11 +25,11 @@ export default function TabNavigation() {
       />
 
       <Tab.Screen
-        name="Appointment"
-        component={Appointment}
+        name="Tracker"
+        component={TrackerNavigation}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="calendar" size={size} color={color} />
+            <Ionicons name="bar-chart" size={size} color={color} />
           ),
         }}
       />
