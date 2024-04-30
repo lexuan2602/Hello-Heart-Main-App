@@ -106,16 +106,17 @@ export default function EditProfile() {
 
   const handleSave = async () => {
     // Lấy profile ID từ kết quả API
-    try {
-      const response = await GlobalApi.editUserProfile(profile);
-      if (response.data !== null) {
-        console.log("update user profile successfully");
-        navigation.replace("ProfileStack");
-      }
-      console.log(response);
-    } catch (error) {
-      console.log("Error updating profile", error);
-    }
+    // try {
+    //   const response = await GlobalApi.editUserProfile(profile);
+    //   if (response.data !== null) {
+    //     console.log("update user profile successfully");
+    //     navigation.replace("ProfileStack");
+    //   }
+    //   console.log(response);
+    // } catch (error) {
+    //   console.log("Error updating profile", error);
+    // }
+    console.log(profile);
   };
 
   const validateAge = (text) => {
@@ -125,6 +126,7 @@ export default function EditProfile() {
         ...prev,
         age: "Age must be a number between 0 and 120",
       }));
+      // handleInputChange("log_age", "0");
     } else {
       setErrors((prev) => {
         const newErrors = { ...prev };
@@ -199,12 +201,12 @@ export default function EditProfile() {
           style={styles.input}
           placeholder="Enter age"
           keyboardType="number-pad"
-          value={String(profile?.log_age)}
+          value={String(profile?.log_age) ? String(profile?.log_age) : "20"}
           onChangeText={(text) => {
             validateAge(Number(text));
           }}
         />
-        {errors.age && <Text style={styles.error}>{errors.age}</Text>}
+        {errors.age && <Text style={{ marginLeft: 16 }}>{errors.age}</Text>}
         {/* Hiển thị lỗi nếu có */}
         {/* Weight */}
         <Text style={styles.label}>Weight (kg)</Text>
@@ -223,6 +225,7 @@ export default function EditProfile() {
           onValueChange={(value) => {
             handleInputChange("height", value);
           }}
+          placeholder={{ label: "Default (150)", value: 150 }}
           value={Number(profile?.height)}
           items={Array.from({ length: 111 }, (_, index) => ({
             label: `${90 + index} cm`,
@@ -237,6 +240,7 @@ export default function EditProfile() {
           onValueChange={(value) => {
             handleInputChange("prevalentStroke", value);
           }}
+          placeholder={{ label: "Default (No)", value: 0 }}
           items={[
             { label: "Yes", value: 1 },
             { label: "No", value: 0 },
@@ -245,6 +249,7 @@ export default function EditProfile() {
         {/* Prevalent Hypertension */}
         <Text style={styles.label}>Prevalent Hypertension </Text>
         <RNPickerSelect
+          placeholder={{ label: "Default (No)", value: 0 }}
           value={profile?.prevalentHyp ? 1 : 0}
           onValueChange={(value) => {
             handleInputChange("prevalentHyp", value);
@@ -257,6 +262,7 @@ export default function EditProfile() {
         {/* Blood Pressure Medication */}
         <Text style={styles.label}>Is Taking Blood Pressure Medication?</Text>
         <RNPickerSelect
+          placeholder={{ label: "Default (No)", value: 0 }}
           value={profile?.BPMeds ? 1 : 0}
           onValueChange={(value) => {
             handleInputChange("BPMeds", value);
@@ -282,6 +288,7 @@ export default function EditProfile() {
         {/* Total Cholesterol */}
         <Text style={styles.label}>Total Cholesterol (mg/dL)</Text>
         <RNPickerSelect
+          placeholder={{ label: "Default (50)", value: 50 }}
           value={Number(profile?.log_totChol)}
           onValueChange={(value) => {
             handleInputChange("log_totChol", value);
@@ -301,6 +308,7 @@ export default function EditProfile() {
           onValueChange={(value) => {
             handleInputChange("log_heartRate", value);
           }}
+          placeholder={{ label: "Default (80)", value: 80 }}
           items={Array.from({ length: 150 }, (_, index) => ({
             label: `${0 + index} `,
             value: 0 + index,
@@ -311,6 +319,7 @@ export default function EditProfile() {
         <Text style={styles.label}>Glucose (mg/dL) </Text>
         <RNPickerSelect
           value={Number(profile?.log_glucose)}
+          placeholder={{ label: "Default (50)", value: 50 }}
           // placeholder={{ label: "Default (140)", value: 140 }}
           onValueChange={(value) => {
             handleInputChange("log_glucose", value);
@@ -325,7 +334,7 @@ export default function EditProfile() {
         <Text style={styles.label}>Cigarrette per day</Text>
         <RNPickerSelect
           value={Number(profile?.log_cigsPerDay)}
-          // placeholder={{ label: "Default (0)", value: 0 }}
+          placeholder={{ label: "Default (0)", value: 0 }}
           onValueChange={(value) => {
             handleInputChange("log_cigsPerDay", value);
           }}
