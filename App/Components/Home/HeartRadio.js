@@ -18,17 +18,14 @@ export default function HeartRadio() {
   const getHeartRadio = async () => {
     const resp = (await GlobalApi.getHeartRadio()).data.data;
     // console.log("Herart Radio");
-    // console.log(resp);
     const result = resp.map((item) => ({
       id: item.id,
       RadioName: item.attributes.RadioName,
       Category: item.attributes.Category.data.attributes.Name,
       description: item.attributes.RadioDescription,
       YoutubeList: item.attributes.YoutubeVideo,
-      image: item.attributes.RadioThumbnail.data.attributes.formats.large.url,
+      image: item.attributes.RadioThumbnail.data.attributes.formats.small.url,
     }));
-    console.log("intems");
-    console.log(result);
     setRadioList(result);
   };
   // const courseList = [
@@ -63,7 +60,7 @@ export default function HeartRadio() {
   };
   return (
     <View style={{ marginTop: 10 }}>
-      <Text
+      {/* <Text
         style={{
           fontSize: 20,
           fontWeight: "bold",
@@ -71,9 +68,8 @@ export default function HeartRadio() {
           marginBottom: 3,
         }}
       >
-        {/* {type} Course */}
-        Advancea
-      </Text>
+        Advanced
+      </Text> */}
 
       <FlatList
         data={radioList}

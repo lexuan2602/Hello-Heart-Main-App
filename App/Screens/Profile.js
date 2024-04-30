@@ -1,37 +1,90 @@
-import { Component } from "react";
+import { Component, useContext, useEffect } from "react";
 import { AntDesign } from "@expo/vector-icons";
-import { reduceEachLeadingCommentRange } from "typescript";
 import React, { useState } from "react";
-import { View, Text, Pressable, TouchableOpacity } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+import {
+  View,
+  Text,
+  Pressable,
+  TouchableOpacity,
+  Button,
+  Dimensions,
+} from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons";
 import { ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-const HeightSelector = () => {
-  const [selectedHeight, setSelectedHeight] = useState("160");
+import GlobalApi from "../Services/GlobalApi";
+import { AuthContext } from "../Context/AuthContext";
 
-  const heightOptions = [...Array(41)].map((_, i) => `${160 + i}`); // Heights from 160 to 200
-
-  return (
-    <View>
-      <Text>Select Your Height (cm):</Text>
-      <Picker
-        selectedValue={selectedHeight}
-        onValueChange={(itemValue) => setSelectedHeight(itemValue)}
-        mode="dropdown"
-      >
-        {heightOptions.map((height) => (
-          <Picker.Item key={height} label={height} value={height} />
-        ))}
-      </Picker>
-    </View>
-  );
-};
+const window_width = Dimensions.get("window").width;
 
 export default function Profile() {
+  const { userData } = useContext(AuthContext);
+  const userId = userData.userInfo.id;
   const navigation = useNavigation();
+  const [profile, setProfile] = useState({});
+  const [isProfileDataEmpty, setIsProfileDataEmpty] = useState(true);
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+
+  const getUserProfile = async () => {
+    try {
+      const response = await GlobalApi.getProfileWithUserId(userId);
+      const response2 = await GlobalApi.getUser(userId);
+      console.log(response);
+      console.log(response2);
+      var result = {};
+      if (response.data && response.data.length > 0) {
+        const profileData = response.data[0].attributes;
+        result = {
+          UserID: profileData.UserID,
+          male: profileData.male,
+          BPMeds: profileData.BPMeds,
+          prevalentStroke: profileData.prevalentStroke,
+          prevalentHyp: profileData.prevalentHyp,
+          diabetes: profileData.diabetes,
+          log_cigsPerDay: profileData.log_cigsPerDay,
+          log_totChol: profileData.log_totChol,
+          weight: profileData.weight,
+          height: profileData.height,
+          log_BMI: profileData.log_BMI,
+          log_heartRate: profileData.log_heartRate,
+          log_glucose: profileData.log_glucose,
+          log_age: profileData.log_age,
+        };
+      }
+
+      if (response2.data !== null) {
+        const userName = response2.username;
+        result = { ...result, username: userName };
+      }
+      console.log(result);
+      if (Object.keys(result).length !== 0) {
+        setProfile(result);
+        setIsProfileDataEmpty(false);
+      }
+      return result;
+    } catch (e) {
+      console.error("Error fetching profile:", e);
+      setIsProfileDataEmpty(true);
+    }
+  };
+
+  useEffect(() => {
+    getUserProfile();
+  }, []);
+
+  useEffect(() => {
+    if (!isProfileDataEmpty && Object.keys(profile).length > 0) {
+      console.log("My profile: ", profile);
+    }
+  }, [isProfileDataEmpty, profile]);
+
+  const hanldeLogout = () => {
+    if (isAuthenticated) {
+      setIsAuthenticated(!isAuthenticated);
+      navigation.replace("login");
+    }
+  };
   return (
     <View class="container" style={styles.container}>
       <ScrollView>
@@ -93,7 +146,9 @@ export default function Profile() {
               >
                 Username
               </Text>
-              <Text style={{ fontSize: 16, color: "#939496" }}>Xuân Võ</Text>
+              <Text style={{ fontSize: 16, color: "#939496" }}>
+                {!isProfileDataEmpty && profile.username}
+              </Text>
             </View>
           </View>
           {/* Start of Sex Row */}
@@ -110,7 +165,11 @@ export default function Profile() {
               >
                 Sex
               </Text>
-              <Text style={{ fontSize: 16, color: "#939496" }}>Xuân Võ</Text>
+              <Text style={{ fontSize: 16, color: "#939496" }}>
+                {!isProfileDataEmpty && profile.male === true
+                  ? "Male"
+                  : "Female"}
+              </Text>
             </View>
           </View>
           {/* Start of DOB Row */}
@@ -125,9 +184,11 @@ export default function Profile() {
               <Text
                 style={{ fontSize: 20, color: "#807879", fontWeight: "bold" }}
               >
-                Date of Birth
+                Age
               </Text>
-              <Text style={{ fontSize: 16, color: "#939496" }}>Xuân Võ</Text>
+              <Text style={{ fontSize: 16, color: "#939496" }}>
+                {!isProfileDataEmpty && Number(profile.log_age)}
+              </Text>
             </View>
           </View>
           {/* Start of Weight Row */}
@@ -142,9 +203,11 @@ export default function Profile() {
               <Text
                 style={{ fontSize: 20, color: "#807879", fontWeight: "bold" }}
               >
-                Height
+                Weight
               </Text>
-              <Text style={{ fontSize: 16, color: "#939496" }}>Xuân Võ</Text>
+              <Text style={{ fontSize: 16, color: "#939496" }}>
+                {!isProfileDataEmpty && profile.weight}
+              </Text>
             </View>
           </View>
           {/* Start of Height Row */}
@@ -161,7 +224,9 @@ export default function Profile() {
               >
                 Height
               </Text>
-              <Text style={{ fontSize: 16, color: "#939496" }}>Xuân Võ</Text>
+              <Text style={{ fontSize: 16, color: "#939496" }}>
+                {!isProfileDataEmpty && profile.height}
+              </Text>
             </View>
           </View>
           {/* Start of Height Row */}
@@ -176,13 +241,36 @@ export default function Profile() {
               <Text
                 style={{ fontSize: 20, color: "#807879", fontWeight: "bold" }}
               >
-                Height
+                Prevalent Stroke
               </Text>
-              <Text style={{ fontSize: 16, color: "#939496" }}>Xuân Võ</Text>
+              <Text style={{ fontSize: 16, color: "#939496" }}>
+                {!isProfileDataEmpty && profile.prevalentStroke === true
+                  ? "Yes"
+                  : "No"}
+              </Text>
             </View>
           </View>
           {/* End of Height Row */}
-
+          {/* Start of BMI */}
+          <View style={styles.personalInfoRow}>
+            <FontAwesome
+              style={{ paddingHorizontal: 10 }}
+              name="heart"
+              size={24}
+              color="#fc8181"
+            />
+            <View style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <Text
+                style={{ fontSize: 20, color: "#807879", fontWeight: "bold" }}
+              >
+                BMI
+              </Text>
+              <Text style={{ fontSize: 16, color: "#939496" }}>
+                {!isProfileDataEmpty && profile.log_BMI}
+              </Text>
+            </View>
+          </View>
+          {/* End of BMI Row */}
           {/* Start of Cholesterol Row */}
           <View style={styles.personalInfoRow}>
             <FontAwesome
@@ -195,9 +283,13 @@ export default function Profile() {
               <Text
                 style={{ fontSize: 20, color: "#807879", fontWeight: "bold" }}
               >
-                Height
+                Prevalent Hypertension
               </Text>
-              <Text style={{ fontSize: 16, color: "#939496" }}>Xuân Võ</Text>
+              <Text style={{ fontSize: 16, color: "#939496" }}>
+                {!isProfileDataEmpty && profile.prevalentHyp === true
+                  ? "Yes"
+                  : "No"}
+              </Text>
             </View>
           </View>
           {/* End of Cholesterol Row */}
@@ -214,9 +306,11 @@ export default function Profile() {
               <Text
                 style={{ fontSize: 20, color: "#807879", fontWeight: "bold" }}
               >
-                Height
+                Taking Blood Pressure Medication
               </Text>
-              <Text style={{ fontSize: 16, color: "#939496" }}>Xuân Võ</Text>
+              <Text style={{ fontSize: 16, color: "#939496" }}>
+                {!isProfileDataEmpty && profile.BPMeds === true ? "Yes" : "No"}
+              </Text>
             </View>
           </View>
           {/* End of Smoking Row */}
@@ -233,9 +327,13 @@ export default function Profile() {
               <Text
                 style={{ fontSize: 20, color: "#807879", fontWeight: "bold" }}
               >
-                Height
+                Diabetes Diagnosis
               </Text>
-              <Text style={{ fontSize: 16, color: "#939496" }}>Xuân Võ</Text>
+              <Text style={{ fontSize: 16, color: "#939496" }}>
+                {!isProfileDataEmpty && profile.diabetes === true
+                  ? "Yes"
+                  : "No"}
+              </Text>
             </View>
           </View>
           {/* End of Alcohol Intake Row */}
@@ -252,9 +350,11 @@ export default function Profile() {
               <Text
                 style={{ fontSize: 20, color: "#807879", fontWeight: "bold" }}
               >
-                Height
+                Total Cholesterol (mg/dL)
               </Text>
-              <Text style={{ fontSize: 16, color: "#939496" }}>Xuân Võ</Text>
+              <Text style={{ fontSize: 16, color: "#939496" }}>
+                {!isProfileDataEmpty && profile.log_totChol}
+              </Text>
             </View>
           </View>
           {/* End of Alcohol Intake Row */}
@@ -271,13 +371,69 @@ export default function Profile() {
               <Text
                 style={{ fontSize: 20, color: "#807879", fontWeight: "bold" }}
               >
-                Height
+                Heart Beat (per min)
               </Text>
-              <Text style={{ fontSize: 16, color: "#939496" }}>Xuân Võ</Text>
+              <Text style={{ fontSize: 16, color: "#939496" }}>
+                {!isProfileDataEmpty && profile.log_heartRate}
+              </Text>
             </View>
           </View>
           {/* End of Physical Activitie Row */}
+          <View style={styles.personalInfoRow}>
+            <FontAwesome
+              style={{ paddingHorizontal: 10 }}
+              name="heart"
+              size={24}
+              color="#fc8181"
+            />
+            <View style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <Text
+                style={{ fontSize: 20, color: "#807879", fontWeight: "bold" }}
+              >
+                Glucose
+              </Text>
+              <Text style={{ fontSize: 16, color: "#939496" }}>
+                {!isProfileDataEmpty && profile.log_glucose}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.personalInfoRow}>
+            <FontAwesome
+              style={{ paddingHorizontal: 10 }}
+              name="heart"
+              size={24}
+              color="#fc8181"
+            />
+            <View style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <Text
+                style={{ fontSize: 20, color: "#807879", fontWeight: "bold" }}
+              >
+                Cigarrettes per day
+              </Text>
+              <Text style={{ fontSize: 16, color: "#939496" }}>
+                {!isProfileDataEmpty && profile.log_cigsPerDay}
+              </Text>
+            </View>
+          </View>
         </View>
+        <TouchableOpacity onPress={() => hanldeLogout()}>
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "#ea8f8f",
+              width: window_width * 0.55,
+              borderRadius: 20,
+              marginBottom: 10,
+              height: 45,
+              alignSelf: "center",
+            }}
+          >
+            <Text style={{ fontSize: 20, color: "white", fontWeight: "bold" }}>
+              Log out
+            </Text>
+          </View>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );

@@ -41,17 +41,13 @@
 //   );
 // }
 
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Pressable } from "react-native";
 import React from "react";
 import { useUser } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-export default function () {
-  // const { isLoaded, isSignedIn, user } = useUser();
-  // if (!isLoaded || !isSignedIn) {
-  //   return null;
-  // }
+export default function ({ userData }) {
   const navigation = useNavigation();
   return (
     <View
@@ -79,11 +75,19 @@ export default function () {
         <View>
           <Text style={{ fontFamily: "appfont" }}>Hello 👋</Text>
           <Text style={{ fontSize: 18, fontFamily: "appfont-bold" }}>
-            Le Xuan
+            {userData && userData}
           </Text>
         </View>
       </View>
-      <Ionicons name="notifications-outline" size={28} color="black" />
+      <Pressable
+        onPress={() => {
+          navigation.navigate("Appointment", {
+            screen: "Appoinment",
+          });
+        }}
+      >
+        <Ionicons name="notifications-outline" size={28} color="black" />
+      </Pressable>
     </View>
   );
 }

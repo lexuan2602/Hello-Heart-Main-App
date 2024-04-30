@@ -11,7 +11,6 @@ export default function Categories() {
   }, []);
   const getCategories = () => {
     GlobalApi.getCategories().then((resp) => {
-      // console.log(resp.data.data);
       setCategoryList(resp.data.data);
     });
   };
