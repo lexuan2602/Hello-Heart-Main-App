@@ -92,7 +92,7 @@ export default function Profile() {
           <View
             class="Title"
             style={{
-              marginTop: 28,
+              marginTop: 16,
               display: "flex",
               flexDirection: "row",
               paddingLeft: 20,
@@ -110,11 +110,17 @@ export default function Profile() {
                 navigation.navigate("EditProfile");
               }}
             >
-              <Text
+              {/* <Text
                 style={{ fontWeight: "200", fontSize: 20, color: "#fc8181" }}
               >
                 Edit Profile
-              </Text>
+              </Text> */}
+              <AntDesign
+                name="edit"
+                size={24}
+                color="#fc8181"
+                style={{ padding: 10 }}
+              />
             </TouchableOpacity>
           </View>
           <View
@@ -453,7 +459,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   profileHeaderText: {
-    marginTop: 10,
+    // marginTop: 10,
     fontSize: 20,
     fontWeight: "600",
     color: "#4e4e4e",

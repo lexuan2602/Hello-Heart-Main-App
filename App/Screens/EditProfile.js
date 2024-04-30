@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-
+import { AntDesign } from "@expo/vector-icons";
 import {
   View,
   Text,
@@ -13,6 +13,8 @@ import {
   Platform,
   Alert,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+
 import { TouchableOpacity } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import axios from "axios";
@@ -135,16 +137,51 @@ export default function EditProfile() {
 
   return (
     // Username
-    <ScrollView>
-      <View style={styles.container}>
-        {/* <Text style={styles.label}>Username</Text>
+    <View style={styles.container}>
+      {/* <Text style={styles.label}>Username</Text>
         <TextInput
           style={styles.input}
           placeholder="Enter username"
           value={username}
           onChangeText={setUsername}
         /> */}
-        {/* Sex */}
+      {/* Sex */}
+      <View
+        style={{
+          backgroundColor: "white",
+          zIndex: 5,
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: 10,
+          // shadowColor: "#000",
+          // shadowOffset: { width: 0, height: 10 }, // Increase the height for a thicker shadow at the bottom
+          // shadowOpacity: 0, // Increase the opacity for a darker shadow
+          // shadowRadius: 40, // Increase the radius for a softer shadow
+          // elevation: 7, // Increase the elevation to match the changes in shadow
+          // width: 400,
+          borderBottomColor: "grey",
+          // borderBottomWidth: 1,
+        }}
+      >
+        {/* <Button title="Save" onPress={handleSave} /> */}
+
+        <TouchableOpacity title="Back" onPress={handleSave}>
+          <Ionicons name="arrow-back-sharp" size={24} color="#fc8181" />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          title="Back"
+          onPress={() => {
+            console.log(2);
+            navigation.navigate("ProfileStack");
+          }}
+        >
+          <AntDesign name="save" size={24} color="#fc8181" />
+        </TouchableOpacity>
+      </View>
+      <ScrollView style={{ zIndex: -1 }}>
         <Text style={styles.label}>Gender</Text>
         <RNPickerSelect
           onValueChange={(value) => {
@@ -298,35 +335,32 @@ export default function EditProfile() {
           }))}
           style={styles.picker}
         />
-        <Button title="Save" onPress={handleSave} />
-        <TouchableOpacity
-          title="Back"
-          onPress={() => {
-            console.log(2);
-            navigation.navigate("ProfileStack");
-          }}
-        >
-          <Text>Back</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: "white",
   },
   label: {
     fontSize: 18,
     marginVertical: 8,
+    marginLeft: 16,
+    color: "#fc8181",
+    fontWeight: "bold",
   },
   input: {
     height: 40,
-    borderColor: "gray",
+    borderColor: "#fc8181",
     borderWidth: 1,
     paddingHorizontal: 10,
     marginBottom: 16,
+    width: "90%",
+    marginHorizontal: 16,
+    borderRadius: 10,
   },
   picker: {
     marginBottom: 16,
