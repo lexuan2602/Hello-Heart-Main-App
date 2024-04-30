@@ -12,6 +12,7 @@ import GlobalApi from "../Services/GlobalApi";
 import { style } from "../Components/Tracker/style";
 import PythonApi from "../Services/PythonApi";
 import { AuthContext } from "../Context/AuthContext";
+import { useNavigation } from "@react-navigation/native";
 
 // Function to get day of the week from a given date
 function getDayOfWeek(date) {
@@ -60,6 +61,7 @@ export default function Tracker() {
   const [profileData, setProfileData] = useState(null);
   const [isProfileDataEmpty, setIsProfileDataEmpty] = useState(true);
   const [lineChartData, setLineChartData] = useState(null);
+  const navigation = useNavigation();
   const userId = userData.userInfo.id;
   // get profile data
   useEffect(() => {
@@ -67,7 +69,6 @@ export default function Tracker() {
       try {
         const response = await GlobalApi.getProfileWithUserId(userId);
         if (response.data !== null) {
-          console.log(response.data);
           setProfileData(response.data[0].attributes);
           setIsProfileDataEmpty(false);
         } else {
@@ -106,13 +107,12 @@ export default function Tracker() {
           time: formattedTime,
         };
       });
-
       setLineChartData(data);
     }
   }, [profileData, isProfileDataEmpty]);
 
   const handlePress = async () => {
-    const data = profileData.attributes;
+    const data = profileData;
     const featuresData = {
       male: Number(data.male),
       BPMeds: Number(data.BPMeds),
@@ -129,9 +129,9 @@ export default function Tracker() {
     };
 
     const response = await PythonApi.getPrediction(featuresData);
-
     if (response?.message === "Successfully") {
       console.log(response.data);
+      navigation.push("Prediction");
     }
   };
   return (
