@@ -4,6 +4,7 @@ import RadioDetail from "../Screens/RadioDetail";
 import Home from "../Screens/Home";
 import RadioVideo from "../Screens/RadioVideo";
 import HomeTest from "../Screens/HomeTest";
+import BloodPressureInput from "../Screens/BloodPressureInput";
 
 const Stack = createNativeStackNavigator();
 export default function HomeStackNavigation() {
@@ -11,6 +12,10 @@ export default function HomeStackNavigation() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="HomeStack" component={Home}></Stack.Screen>
       <Stack.Screen name="BPInput" component={HomeTest}></Stack.Screen>
+      <Stack.Screen
+        name="BPInputForm"
+        component={BloodPressureInput}
+      ></Stack.Screen>
       <Stack.Screen name="Radio-detail" component={RadioDetail}></Stack.Screen>
       <Stack.Screen name="play-video" component={RadioVideo}></Stack.Screen>
       {/* <Stack.Screen name="course-chapter" component={CourseChapter} />*/}

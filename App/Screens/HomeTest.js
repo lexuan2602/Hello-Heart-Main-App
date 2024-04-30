@@ -9,7 +9,7 @@ export default function HomeTest() {
       <Text>HomeTest</Text>
       <Pressable
         onPress={() => {
-          navigation.navigate("BloodPressureInput");
+          navigation.navigate("BPInputForm");
         }}
       >
         <Text>Input your heart pressure</Text>

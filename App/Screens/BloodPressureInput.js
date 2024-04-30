@@ -5,12 +5,13 @@ import Slider from "@react-native-community/slider";
 import axios from "axios";
 import moment from "moment";
 import { AuthContext } from "../Context/AuthContext";
+import { useNavigation } from "@react-navigation/native";
 
 export default function BloodPressureInput() {
   // Giá trị mặc định cho huyết áp (120/80 là huyết áp bình thường)
   const { userData } = useContext(AuthContext);
   const userId = userData.userInfo.id;
-
+  const navigation = useNavigation();
   const [diastolic, setDiastolic] = useState(80);
 
   const [userProfile, setUserProfile] = useState(null);
@@ -20,7 +21,7 @@ export default function BloodPressureInput() {
     const fetchUserProfile = async () => {
       try {
         const response = await axios.get(
-          `http://10.20.7.96:1337/api/profiles?filters[UserID][$eq]=${userId}`
+          `http://10.20.7.130:1337/api/profiles?filters[UserID][$eq]=${userId}`
         );
         if (response.data.data.length > 0) {
           setUserProfile(response.data.data[0]); // Lấy profile đầu tiên
@@ -91,18 +92,25 @@ export default function BloodPressureInput() {
     }
     try {
       // Cập nhật trường BloodPressureData với giá trị mới
+      console.log(81);
+      const authToken =
+        "946e252792823538401ab000e45b3e407d6c033f0a35cdc834bcd46d895f41248f3035cb0308d809f5b601f2df3537609233781d3714b9e4655fa25332899c7e9106f85baf552c831552d48b7010f417ee06b51842d52dcfe40e7ea3931ec46e4937991df3995e9749627d01913fbf9dfea8537988ae000e87b24ec752290b2f";
       const response = await axios.put(
-        `http://10.20.7.96:1337/api/profiles/${userProfile.id}`,
+        `http://10.20.7.130:1337/api/profiles/${userProfile.id}`,
         {
           data: {
             BloodPressureData: {
               data: updatedBloodPressureData, // Mảng đã cập nhật
             },
           },
+        },
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
         }
       );
 
       console.log("Blood pressure data saved:", response.data);
+      navigation.replace("HomeStack");
     } catch (error) {
       console.error("Error saving blood pressure:", error);
     }
