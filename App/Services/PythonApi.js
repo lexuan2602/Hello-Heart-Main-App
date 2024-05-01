@@ -34,7 +34,27 @@ const getPrediction = async (userProfile) => {
 
 const getInfo = async () => {
   try {
-    const response = await AxiosInstance2.get("/endpoint/");
+    const response = await AxiosInstance.get("/endpoint/");
+    return response.data;
+  } catch (error) {
+    // Handle errors
+    if (error.response) {
+      // Strapi returns errors in `error.response.data`
+      console.error("Error:", error.response.data);
+      throw error.response.data; // Rethrow to handle elsewhere
+    } else {
+      console.error("Network or unknown error:", error);
+      throw new Error("Network or unknown error occurred");
+    }
+  }
+};
+
+const getSolutions = async (patientProfile) => {
+  try {
+    const response = await AxiosInstance.post(
+      "/info/tabu_search_patient/",
+      patientProfile
+    );
     return response.data;
   } catch (error) {
     // Handle errors
@@ -52,4 +72,5 @@ const getInfo = async () => {
 export default {
   getPrediction,
   getInfo,
+  getSolutions,
 };

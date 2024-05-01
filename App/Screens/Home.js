@@ -12,7 +12,7 @@ import BloodPressure from "../Components/Home/BloodPressure";
 import HeartRadio from "../Components/Home/HeartRadio";
 import { AuthContext } from "../Context/AuthContext";
 
-export default function Home({ route }) {
+export default function Home({ route, navigation }) {
   const { userData } = useContext(AuthContext);
   return (
     <View style={{ padding: 20, marginTop: 25 }}>

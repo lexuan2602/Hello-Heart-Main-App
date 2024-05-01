@@ -32,6 +32,7 @@ export default function TabNavigation() {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="bar-chart" size={size} color={color} />
           ),
+          unmountOnBlur: true,
         }}
       />
       <Tab.Screen

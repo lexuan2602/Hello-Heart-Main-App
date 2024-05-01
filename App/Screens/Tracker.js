@@ -56,32 +56,33 @@ function parseDate(dateStr) {
   return new Date(dateStr); // Convert the string into a Date object
 }
 
-export default function Tracker() {
+export default function Tracker({ route }) {
   const { userData } = useContext(AuthContext);
   const [profileData, setProfileData] = useState(null);
   const [isProfileDataEmpty, setIsProfileDataEmpty] = useState(true);
   const [lineChartData, setLineChartData] = useState(null);
   const navigation = useNavigation();
   const userId = userData.userInfo.id;
-  // get profile data
-  useEffect(() => {
-    async function getProfileData() {
-      try {
-        const response = await GlobalApi.getProfileWithUserId(userId);
-        if (response.data !== null) {
-          setProfileData(response.data[0].attributes);
-          setIsProfileDataEmpty(false);
-        } else {
-          setIsProfileDataEmpty(true);
-        }
-      } catch (e) {
-        console.error("Error fetching profile:", e);
+
+  async function getProfileData() {
+    try {
+      const response = await GlobalApi.getProfileWithUserId(userId);
+      if (response.data !== null) {
+        setProfileData(response.data[0].attributes);
+        setIsProfileDataEmpty(false);
+      } else {
         setIsProfileDataEmpty(true);
       }
+    } catch (e) {
+      console.error("Error fetching profile:", e);
+      setIsProfileDataEmpty(true);
     }
+  }
 
+  // get profile data
+  useEffect(() => {
     getProfileData();
-  }, [userId]);
+  }, []);
 
   useEffect(() => {
     if (profileData && !isProfileDataEmpty) {
@@ -90,8 +91,6 @@ export default function Tracker() {
       const sortedData = slicedArray.sort((a, b) => {
         const dateA = parseDate(a.enteredDate);
         const dateB = parseDate(b.enteredDate);
-
-        // Compare Date objects
         return dateA - dateB; // Ascending order
       });
 
@@ -112,27 +111,7 @@ export default function Tracker() {
   }, [profileData, isProfileDataEmpty]);
 
   const handlePress = async () => {
-    const data = profileData;
-    const featuresData = {
-      male: Number(data.male),
-      BPMeds: Number(data.BPMeds),
-      prevalentStroke: Number(data.prevalentStroke),
-      prevalentHyp: Number(data.prevalentHyp),
-      diabetes: Number(data.diabetes),
-      log_cigsPerDay: Number(data.log_cigsPerDay),
-      log_totChol: Number(data.log_totChol),
-      log_diaBP: Number(lineChartData[lineChartData.length - 1].value),
-      log_BMI: Number(data.log_BMI),
-      log_heartRate: Number(data.log_heartRate),
-      log_glucose: Number(data.log_glucose),
-      log_age: Number(data.log_age),
-    };
-
-    const response = await PythonApi.getPrediction(featuresData);
-    if (response?.message === "Successfully") {
-      console.log(response.data);
-      navigation.push("Prediction");
-    }
+    navigation.push("Prediction");
   };
   return (
     <View style={[style.bPressureWrapper]}>

@@ -142,6 +142,26 @@ const editUserProfile = async (editData) => {
   }
 };
 
+// get solution based on index
+const getSolutionBasedOnIndex = async (index) => {
+  try {
+    const response = await AxiosInstance.get(
+      `/api/solutions?filters[Index][$eq]=${index}`
+    );
+    return response.data;
+  } catch (error) {
+    // Handle errors
+    if (error.response) {
+      // Strapi returns errors in `error.response.data`
+      console.error("Error:", error.response.data);
+      throw error.response.data; // Rethrow to handle elsewhere
+    } else {
+      console.error("Network or unknown error:", error);
+      throw new Error("Network or unknown error occurred");
+    }
+  }
+};
+
 const getSlider = () => AxiosInstance.get("/api/sliders?populate=*");
 const getCategories = () => AxiosInstance.get("/api/categories?populate=*");
 const getHeartRadio = () => AxiosInstance.get("/api/heart-radios?populate=*");
@@ -153,6 +173,7 @@ export default {
   getProfileWithProfileId,
   getProfileWithUserId,
   editUserProfile,
+  getSolutionBasedOnIndex,
   getSlider,
   getCategories,
   getHeartRadio,
