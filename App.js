@@ -5,6 +5,7 @@ import TabNavigation from "./App/Navigations/TabNavigation";
 import { useFonts } from "expo-font";
 import AuthenticateNavigator from "./App/Navigations/AuthenticateNavigator";
 import { AuthContext } from "./App/Context/AuthContext";
+import Prediction from "./Screens/Prediction";
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -41,6 +42,7 @@ export default function App() {
       <SafeAreaView style={styles.container}>
         <NavigationContainer>
           {isAuthenticated ? <TabNavigation /> : <AuthenticateNavigator />}
+          {/* <Prediction /> */}
         </NavigationContainer>
       </SafeAreaView>
     </AuthContext.Provider>
