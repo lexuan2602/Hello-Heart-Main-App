@@ -81,6 +81,11 @@ export default function BloodPressure() {
         height: 150,
         backgroundColor: "#fc8181",
         padding: 10,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 20 }, // Increase the height for a thicker shadow at the bottom
+        shadowOpacity: 0.5, // Increase the opacity for a darker shadow
+        shadowRadius: 20, // Increase the radius for a softer shadow
+        elevation: 6, // Increase the elevation to match the changes in shadow
       }}
     >
       <Image

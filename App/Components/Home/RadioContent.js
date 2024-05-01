@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Colors from "../../../assets/Shared/Colors";
 import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+// import { ScrollView } from "react-native-reanimated/lib/typescript/Animated";
 
 export default function RadioContent({ Videos }) {
   const navigation = useNavigation();
@@ -18,8 +19,9 @@ export default function RadioContent({ Videos }) {
 
   return (
     <View style={{ marginTop: 10 }}>
-      <Text style={{ fontWeight: "bold", fontSize: 16 }}>Course Content</Text>
+      <Text style={{ fontWeight: "bold", fontSize: 20 }}>Radio Content</Text>
       <FlatList
+        nestedScrollEnabled
         style={{ marginTop: 10 }}
         data={Videos}
         renderItem={({ item, index }) => (
@@ -36,6 +38,7 @@ export default function RadioContent({ Videos }) {
             }}
           >
             <Text
+              ellipsizeMode="tail"
               style={{
                 fontWeight: "bold",
                 fontSize: 20,
@@ -53,7 +56,7 @@ export default function RadioContent({ Videos }) {
               name="play-circle"
               size={24}
               style={{ position: "absolute", right: 10 }}
-              color={Colors.PRIMARY}
+              color={"#fc8181"}
             />
           </TouchableOpacity>
         )}

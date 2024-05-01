@@ -1,11 +1,21 @@
 import * as React from "react";
-import { View, Text, TextInput, StyleSheet, Button, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Button,
+  Alert,
+  Image,
+  KeyboardAvoidingView,
+} from "react-native";
 import { useState, useEffect, useContext } from "react";
 import Slider from "@react-native-community/slider";
 import axios from "axios";
 import moment from "moment";
 import { AuthContext } from "../Context/AuthContext";
 import { useNavigation } from "@react-navigation/native";
+import { TouchableOpacity } from "react-native";
 
 export default function BloodPressureInput() {
   // Giá trị mặc định cho huyết áp (120/80 là huyết áp bình thường)
@@ -130,23 +140,38 @@ export default function BloodPressureInput() {
   return (
     <View style={styles.container}>
       <View style={styles.bp_input}>
+        <Image
+          source={require("../../assets/images/wired-flat-1249-heart-beat.gif")}
+          style={{ width: 100, height: 100, marginTop: 40 }}
+        />
         <Text style={styles.title}>Enter Your Blood Pressure</Text>
-        <Text style={styles.label}>Diastolic (Bottom Number): {diastolic}</Text>
+
         <Slider
-          style={{ width: 300, height: 40 }}
+          style={{ width: 300, height: 40, color: "white" }}
           minimumValue={60}
           maximumValue={120}
           step={1}
           value={diastolic}
           onValueChange={setDiastolic}
         />
+
         <TextInput
           style={styles.input}
           keyboardType="numeric"
           value={String(diastolic)}
           onChangeText={(text) => handleDiastolicChange(text)}
         />
-        <Button title="Save Blood Pressure" onPress={saveBloodPressure} />
+        <TouchableOpacity title="Save" onPress={saveBloodPressure}>
+          <Text
+            style={{
+              color: "white",
+              fontSize: 15,
+              textDecorationLine: "underline",
+            }}
+          >
+            Save your changes
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -157,12 +182,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "white",
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+    color: "white",
+    marginTop: 20,
   },
   label: {
     fontSize: 18,
@@ -173,15 +200,25 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     padding: 10,
     width: 100,
+    color: "white",
     textAlign: "center",
-    marginBottom: 20,
+    borderRadius: 30,
+    marginTop: 24,
+    marginBottom: 30,
   },
   bp_input: {
     display: "flex",
     flexDirection: "column",
+    backgroundColor: "#fc8181",
     justifyContent: "center",
     alignItems: "center",
-    width: "100%",
-    height: "100%",
+    borderRadius: 30,
+    width: "80%",
+    height: "80%",
+    shadowColor: "#000",
+    shadowOffset: { width: 5, height: 20 }, // Increase the height for a thicker shadow at the bottom
+    shadowOpacity: 0.3, // Increase the opacity for a darker shadow
+    shadowRadius: 20, // Increase the radius for a softer shadow
+    elevation: 6, // Increase the elevation to match the changes in shadow
   },
 });

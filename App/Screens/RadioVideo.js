@@ -1,8 +1,9 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import YoutubePlayer from "react-native-youtube-iframe";
+
 export default function RadioVideo() {
   const navigation = useNavigation();
   const video = useRoute().params.courseContent;
@@ -16,12 +17,12 @@ export default function RadioVideo() {
     }
   }, []);
   return (
-    <View style={{ padding: 20, marginTop: 25 }}>
+    <View style={{ padding: 20, backgroundColor: "white" }}>
       <TouchableOpacity
         onPress={() => navigation.goBack()}
         style={{ marginBottom: 10 }}
       >
-        <Ionicons name="arrow-back-sharp" size={24} color="black" />
+        <Ionicons name="arrow-back-sharp" size={24} color="#fc8181" />
       </TouchableOpacity>
       {videoChapter ? (
         <View>
@@ -34,10 +35,22 @@ export default function RadioVideo() {
             videoId={video?.Link}
             onChangeState={onStateChange}
           />
-          <Text style={{ fontWeight: "bold", marginBottom: 10 }}>
+          {/* <Text style={{ fontWeight: "bold", marginBottom: 10 }}>
             Description
           </Text>
-          <Text style={{ lineHeight: 20 }}>{video?.Description}</Text>
+          <Text style={{ lineHeight: 20 }}>{video?.Description}</Text> */}
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+            }}
+          >
+            <Image
+              source={require("../../assets/images/HeartForeverLoop.gif")}
+              style={{ width: 300, height: 300 }}
+            />
+          </View>
         </View>
       ) : null}
     </View>
